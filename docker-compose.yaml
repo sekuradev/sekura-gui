@@ -1,0 +1,110 @@
+version: '3.3'
+
+services:
+  db:
+    image: postgres
+    environment: &secrets
+      POSTGRES_PASSWORD: &password secret
+      DB_PASSWORD: *password
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+
+  redis:
+    image: redis
+
+  adminer:
+    image: adminer
+    ports:
+      - "9998:8080"
+    depends_on:
+      - db
+    environment:
+      << : *secrets
+      ADMINER_PLUGINS: dump-json tables-filter
+
+  sekura:
+    build: ./sekura
+    image: sekura:local
+    volumes:
+      - ./sekura:/app
+    depends_on:
+      - db
+    environment: &sekurasecrets
+      << : *secrets
+      DB_ENGINE: django.db.backends.postgresql
+      DB_USER: postgres
+      DB_PASSWORD: *password
+      DB_HOST: db
+      DEBUG: "true"
+      ALLOWED_HOSTS: sekura,sekura:8000
+      PYTHONDONTWRITEBYTECODE: 1
+      CACHE_JSON: |
+        {
+            "default": {
+                "BACKEND": "django.core.cache.backends.redis.RedisCache",
+                "LOCATION": [
+                    "redis://redis:6379/0"
+                ]
+            },
+            "celery-results": {
+                "BACKEND": "django.core.cache.backends.redis.RedisCache",
+                "LOCATION": [
+                    "redis://redis:6379/2"
+                ]
+            }
+        }
+      CELERY_RESULT_BACKEND: "redis://redis:6379/2"
+      CELERY_BROKER_URL: "redis://redis:6379/1"
+    ports:
+      - 9997:8000
+
+  sekura-beat:
+    image: sekura:local
+    command: ./docker-exec.sh celery -A sekura beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    volumes:
+      - ./sekura:/app
+    depends_on:
+      - redis
+    environment:
+      << : *sekurasecrets
+
+  sekura-worker:
+    image: sekura:local
+    command: ./docker-exec.sh celery -A sekura worker -l INFO
+    volumes:
+      - ./sekura:/app
+    depends_on:
+      - redis
+    environment:
+      << : *sekurasecrets
+
+  sekura-automate:
+    image: sekura:local
+    command: ./docker-automate.sh
+    volumes:
+      - ./sekura:/app
+    depends_on:
+      - db
+    environment:
+      << : *sekurasecrets
+
+  gui:
+    build: ./sekura-gui
+    #image: node:17-alpine
+    working_dir: /app
+    command: "npm start"
+    volumes:
+      - ./sekura-gui:/app
+    ports:
+      - 9996:3000
+
+  nginx:
+    image: nginx
+    depends_on:
+      - sekura
+      - gui
+    volumes:
+      - ./nginx:/etc/nginx/conf.d/
+      - ./sekura/assets:/usr/share/nginx/html/assets
+    ports:
+      - 9999:80
