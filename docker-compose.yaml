@@ -78,6 +78,14 @@ services:
     environment:
       << : *sekurasecrets
 
+  sekura-flower:
+    image: sekura:local
+    command: ./docker-exec.sh celery flower --port=8000 --url-prefix=/flower
+    volumes:
+      - ./sekura:/app
+    environment:
+      << : *sekurasecrets
+
   sekura-automate:
     image: sekura:local
     command: ./docker-automate.sh
@@ -87,6 +95,7 @@ services:
       - db
     environment:
       << : *sekurasecrets
+
 
   gui:
     build: ./sekura-gui
