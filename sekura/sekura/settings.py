@@ -151,3 +151,9 @@ CACHES = (
 )
 
 CELERY_RESULT_BACKEND = os.environ.get("CELERY_RESULT_BACKEND")
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ]
+}
