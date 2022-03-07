@@ -28,7 +28,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY", 'django-insecure-=rc#qjmyvbu1h*i&_ugrc
 DEBUG = os.environ.get("DEBUG", "false").lower() == "true"
 
 ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(',')
-
+CSRF_TRUSTED_ORIGINS = os.environ.get("CSRF_TRUSTED_ORIGINS", "").split(",")
 
 # Application definition
 
@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'rest_framework.authtoken',
 
     'django_celery_results',
     'django_celery_beat',
@@ -132,7 +134,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-STATIC_URL = 'backstatic/'
+STATIC_URL = '/backstatic/'
 STATIC_ROOT = 'assets'
 
 # Default primary key field type
@@ -153,7 +155,7 @@ CACHES = (
 CELERY_RESULT_BACKEND = os.environ.get("CELERY_RESULT_BACKEND")
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
     ]
 }

@@ -36,7 +36,8 @@ services:
       DB_PASSWORD: *password
       DB_HOST: db
       DEBUG: "true"
-      ALLOWED_HOSTS: sekura,sekura:8000
+      ALLOWED_HOSTS: sekura,sekura:8000,localhost:9999,localhost:9996
+      CSRF_TRUSTED_ORIGINS: http://sekura
       PYTHONDONTWRITEBYTECODE: 1
       CACHE_JSON: |
         {
