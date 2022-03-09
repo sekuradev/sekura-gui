@@ -1,13 +1,14 @@
 import React from 'react';
 import bootstrap from 'bootstrap'
 import './login.css';
-
+import Session from "../../services/session/session";
 export default class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       username: "",
       password: "",
+      lastError: "",
     }
     this.handleChangeUsername = this.handleChangeUsername.bind(this);
     this.handleChangePassword = this.handleChangePassword.bind(this);
@@ -24,27 +25,29 @@ export default class Login extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-
+    var session = new Session();
+    session.login(this.state.username, this.state.password, null, (error) => {this.setState(error) });
   }
 
   render() {
     return (
-      <div class="login">
-        <div class="form-signin text-center">
+      <div className="login">
+        <div className="form-signin text-center">
           <form onSubmit={this.handleSubmit}>
-            <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+            <h1 className="h3 mb-3 fw-normal">Please sign in</h1>
 
-            <div class="form-floating">
-              <input type="email" class="form-control" id="email" placeholder="name@example.com" onChange={this.handleChangeUsername}/>
-              <label for="email">Email address</label>
+            <div className="form-floating">
+              <input type="email" className="form-control" id="email" placeholder="name@example.com" onChange={this.handleChangeUsername}/>
+              <label htmlFor="email">Email address</label>
             </div>
-            <div class="form-floating">
-              <input type="password" class="form-control" id="Password" placeholder="Password" onChange={this.handleChangePassword}/>
-              <label for="Password">Password</label>
+            <div className="form-floating">
+              <input type="password" className="form-control" id="Password" placeholder="Password" onChange={this.handleChangePassword}/>
+              <label htmlFor="Password">Password</label>
             </div>
+            <p className="Invalid Feedback">{this.lastError}</p>
 
-            <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
-            <p class="mt-5 mb-3 text-muted">&copy; 2022</p>
+            <button className="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
+            <p className="mt-5 mb-3 text-muted">&copy; 2022</p>
           </form>
         </div>
       </div>

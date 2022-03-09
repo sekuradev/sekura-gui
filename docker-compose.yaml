@@ -106,7 +106,9 @@ services:
     volumes:
       - ./sekura-gui:/app
     ports:
-      - 9996:3000
+      - 9996:9999
+    environment:
+      PORT: "9999"
 
   nginx:
     image: nginx
