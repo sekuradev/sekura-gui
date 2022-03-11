@@ -1,7 +1,7 @@
 import React from 'react';
 import bootstrap from 'bootstrap'
 import './login.css';
-import Session from "../../services/session/session";
+var session = require("../../services/session/session");
 export default class Login extends React.Component {
   constructor(props) {
     super(props);
@@ -25,8 +25,21 @@ export default class Login extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    var session = new Session();
-    session.login(this.state.username, this.state.password, null, (error) => {this.setState(error) });
+    session.login(
+      this.state.username,
+      this.state.password,
+    )
+    .then((p) => {
+      console.log("success!");
+      this.props.handleLoginChange(true);
+    })
+    .catch((error) => {
+      console.log("fail!");
+      console.log(error.toString());
+      console.log(error);
+      this.setState({lastError: error.toString()});
+    })
+    ;
   }
 
   render() {
@@ -44,7 +57,7 @@ export default class Login extends React.Component {
               <input type="password" className="form-control" id="Password" placeholder="Password" onChange={this.handleChangePassword}/>
               <label htmlFor="Password">Password</label>
             </div>
-            <p className="Invalid Feedback">{this.lastError}</p>
+            <p className="Invalid Feedback">{this.state.lastError}</p>
 
             <button className="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
             <p className="mt-5 mb-3 text-muted">&copy; 2022</p>
