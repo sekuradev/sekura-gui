@@ -13,6 +13,8 @@ export default class Login extends React.Component {
     this.handleChangeUsername = this.handleChangeUsername.bind(this);
     this.handleChangePassword = this.handleChangePassword.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+
+    this.props.handleLoginChange(session.isLogged());
   }
 
   handleChangeUsername(event) {
@@ -31,7 +33,7 @@ export default class Login extends React.Component {
     )
     .then((p) => {
       console.log("success!");
-      this.props.handleLoginChange(true);
+      this.props.handleLoginChange(session.isLogged());
     })
     .catch((error) => {
       console.log("fail!");
