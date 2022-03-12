@@ -1,7 +1,7 @@
 import React from 'react';
-import bootstrap from 'bootstrap'
 import './login.css';
 var session = require("../../services/session/session");
+
 export default class Login extends React.Component {
   constructor(props) {
     super(props);

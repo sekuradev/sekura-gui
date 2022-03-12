@@ -1,6 +1,5 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import bootstrap from 'bootstrap'
 import './App.css';
 
 import {
@@ -14,14 +13,31 @@ import Login from '../login/login';
 import Header from '../header/header';
 import Dashboard from '../dashboard/dashboard';
 import Preferences from '../preferences/preferences';
+var session = require("../../services/session/session");
 
 export default class App extends React.Component{
   constructor(props) {
     super(props);
     this.handleLoginChange = this.handleLoginChange.bind(this);
+    this.refreshSessionToken = this.refreshSessionToken.bind(this);
     this.state = {
       logged: false,
     }
+  }
+
+  componentDidMount() {
+    this.timerID = setInterval(
+      () => this.refreshSessionToken(),
+      60000
+    );
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timerID);
+  }
+
+  refreshSessionToken() {
+    session.refresh();
   }
 
   handleLoginChange(newState) {
@@ -36,8 +52,7 @@ export default class App extends React.Component{
     }
     return (
       <div className="main">
-        <Header/>
-        <h1>Application</h1>
+        <Header handleLoginChange={this.handleLoginChange} />
         <Router>
           <div>
             <ul>
