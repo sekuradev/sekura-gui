@@ -1,4 +1,8 @@
 .wrapper {
-    padding: 0px;
+  padding: 0px;
+}
+
+.sidebar {
+  width: 280px;
 }
 

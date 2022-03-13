@@ -7,10 +7,6 @@ export function login(user, password) {
   return axios.post("/api/token/", {
     username: user,
     password: password,
-  },{
-    headers: {
-      "Content-Type": "application/json",
-    },
   })
   .then((response) => {
     localStorage.setItem("access", response.data.access);
@@ -41,10 +37,6 @@ export function refresh(){
   return axios.post("/api/token/refresh/", {
     access: localStorage.getItem("access"),
     refresh: localStorage.getItem("refresh"),
-  },{
-    headers: {
-      "Content-Type": "application/json",
-    },
   })
   .then((response) => {
     if (response.data.access) {
