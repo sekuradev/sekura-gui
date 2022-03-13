@@ -7,6 +7,7 @@ export default class Header extends React.Component{
 
     this.logout = this.logout.bind(this);
     this.state = {
+      userId: props.userId,
     }
   }
 
@@ -21,6 +22,7 @@ export default class Header extends React.Component{
         <div className="container-fluid">
             <a className="navbar-brand" href="/"><b>SEKURA</b></a>
             <div className="d-flex">
+              <span className="nav-link disabled">{this.props.userId}</span>
               <button type="button" className="btn btn-outline-light me-2" onClick={this.logout}>Logout</button>
             </div>
         </div>

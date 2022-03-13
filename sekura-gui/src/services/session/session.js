@@ -17,16 +17,16 @@ export function login(user, password) {
   })
 }
 
-export function isLogged() {
+export function getUserId() {
   try {
     var access = localStorage.getItem("access");
     var decoded = jwt_decode(access);
     if (Date.now() > decoded.exp * 1000) {
-      return false;
+      return null;
     }
-    return true;
+    return decoded.user_id;
   } catch (error){
-    return false;
+    return null;
   }
 }
 
@@ -37,10 +37,6 @@ export function logout() {
 
 export function refresh(){
   var access = localStorage.getItem("access");
-  var decoded = jwt_decode(access);
-  console.log(localStorage.getItem("refresh"));
-  console.log(access);
-  console.log(decoded);
 
   return axios.post("/api/token/refresh/", {
     access: localStorage.getItem("access"),

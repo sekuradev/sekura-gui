@@ -21,7 +21,7 @@ export default class App extends React.Component{
     this.handleLoginChange = this.handleLoginChange.bind(this);
     this.refreshSessionToken = this.refreshSessionToken.bind(this);
     this.state = {
-      logged: false,
+      userId: null,
     }
   }
 
@@ -40,19 +40,19 @@ export default class App extends React.Component{
     session.refresh();
   }
 
-  handleLoginChange(newState) {
-    this.setState({logged: newState});
+  handleLoginChange(newUserId) {
+    this.setState({userId: newUserId});
   }
 
   render() {
-    if (! this.state.logged) {
+    if (this.state.userId == null) {
       return (
         <Login handleLoginChange={this.handleLoginChange} />
       )
     }
     return (
       <div className="main">
-        <Header handleLoginChange={this.handleLoginChange} />
+        <Header userId={this.state.userId} handleLoginChange={this.handleLoginChange} />
         <Router>
           <div>
             <ul>
