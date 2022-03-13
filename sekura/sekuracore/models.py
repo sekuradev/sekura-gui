@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 
@@ -6,6 +7,7 @@ from django.contrib.contenttypes.models import ContentType
 class Organization(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
+    users = models.ManyToManyField(get_user_model(), related_name="organizations")
 
     def __str__(self):
         return self.name

@@ -35,7 +35,7 @@ services:
       DB_USER: postgres
       DB_PASSWORD: *password
       DB_HOST: db
-      DEBUG: "true"
+      DJANGO_DEBUG: "true"
       ALLOWED_HOSTS: sekura,sekura:8000,localhost:9999,localhost:9996
       CSRF_TRUSTED_ORIGINS: http://sekura
       PYTHONDONTWRITEBYTECODE: 1
