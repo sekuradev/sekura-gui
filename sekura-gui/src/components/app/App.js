@@ -13,7 +13,7 @@ import Login from '../login/login';
 import Header from '../header/header';
 import Dashboard from '../dashboard/dashboard';
 import Preferences from '../preferences/preferences';
-var session = require("../../services/session/session");
+var session = require("../../services/session");
 
 export default class App extends React.Component{
   constructor(props) {
@@ -42,6 +42,10 @@ export default class App extends React.Component{
 
   handleLoginChange(newUserId) {
     this.setState({userId: newUserId});
+    if (newUserId == null) {
+      return
+    }
+
   }
 
   render() {

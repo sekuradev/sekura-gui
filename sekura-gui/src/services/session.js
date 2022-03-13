@@ -36,8 +36,6 @@ export function logout() {
 }
 
 export function refresh(){
-  var access = localStorage.getItem("access");
-
   return axios.post("/api/token/refresh/", {
     access: localStorage.getItem("access"),
     refresh: localStorage.getItem("refresh"),

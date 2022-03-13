@@ -1,5 +1,5 @@
 import React from 'react';
-var session = require("../../services/session/session");
+var session = require("../../services/session");
 
 export default class Header extends React.Component{
   constructor(props) {
@@ -13,7 +13,7 @@ export default class Header extends React.Component{
 
   logout() {
     session.logout();
-    this.props.handleLoginChange(false);
+    this.props.handleLoginChange(null);
   }
 
   render() {

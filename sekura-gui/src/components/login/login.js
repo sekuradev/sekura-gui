@@ -1,6 +1,6 @@
 import React from 'react';
 import './login.css';
-var session = require("../../services/session/session");
+var session = require("../../services/session");
 
 export default class Login extends React.Component {
   constructor(props) {
