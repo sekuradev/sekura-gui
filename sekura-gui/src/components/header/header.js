@@ -7,8 +7,16 @@ export default class Header extends React.Component{
 
     this.logout = this.logout.bind(this);
     this.state = {
-      userId: props.userId,
+      user: props.user,
     }
+    console.log(this.state);
+  }
+
+  getUsername() {
+    if (this.state.user == null) {
+      return null;
+    }
+    return this.state.user.username;
   }
 
   logout() {
@@ -22,7 +30,7 @@ export default class Header extends React.Component{
         <div className="container-fluid">
             <a className="navbar-brand" href="/"><b>SEKURA</b></a>
             <div className="d-flex">
-              <span className="nav-link disabled">{this.props.userId}</span>
+              <span className="nav-link disabled">{this.getUsername()}</span>
               <button type="button" className="btn btn-outline-light me-2" onClick={this.logout}>Logout</button>
             </div>
         </div>

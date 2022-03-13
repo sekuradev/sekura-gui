@@ -13,7 +13,8 @@ import Login from '../login/login';
 import Header from '../header/header';
 import Dashboard from '../dashboard/dashboard';
 import Preferences from '../preferences/preferences';
-var session = require("../../services/session");
+var apiSession = require("../../services/session");
+var apiUser = require("../../services/user");
 
 export default class App extends React.Component{
   constructor(props) {
@@ -21,7 +22,7 @@ export default class App extends React.Component{
     this.handleLoginChange = this.handleLoginChange.bind(this);
     this.refreshSessionToken = this.refreshSessionToken.bind(this);
     this.state = {
-      userId: null,
+      user: null,
     }
   }
 
@@ -37,26 +38,29 @@ export default class App extends React.Component{
   }
 
   refreshSessionToken() {
-    session.refresh();
+    apiSession.refresh();
   }
 
   handleLoginChange(newUserId) {
-    this.setState({userId: newUserId});
     if (newUserId == null) {
+      this.setState({user: null});
       return
     }
-
+    apiUser.getCurrentUser().then((response) => {
+      console.log(response.data);
+      this.setState({user: response.data});
+    });
   }
 
   render() {
-    if (this.state.userId == null) {
+    if (this.state.user == null) {
       return (
         <Login handleLoginChange={this.handleLoginChange} />
       )
     }
     return (
       <div className="main">
-        <Header userId={this.state.userId} handleLoginChange={this.handleLoginChange} />
+        <Header user={this.state.user} handleLoginChange={this.handleLoginChange} />
         <Router>
           <div>
             <ul>

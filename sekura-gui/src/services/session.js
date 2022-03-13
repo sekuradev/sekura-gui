@@ -1,6 +1,8 @@
 import axios from "axios";
 import jwt_decode from 'jwt-decode';
 
+axios.defaults.headers.common['Content-Type'] = "application/json";
+
 export function login(user, password) {
   return axios.post("/api/token/", {
     username: user,
