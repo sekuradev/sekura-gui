@@ -12,7 +12,6 @@ import {
 } from "react-router-dom";
 
 import Login from '../login/login';
-import Header from '../header/header';
 import Dashboard from '../dashboard/dashboard';
 import Preferences from '../preferences/preferences';
 var apiSession = require("../../services/session");
@@ -66,7 +65,7 @@ export default class App extends React.Component{
 
   handleOrganizationOnClick(event) {
     if (this.state.organizations) {
-      this.setState({organization: this.state.organizations.filter(org => org.id == event.target.dataset.id)[0]});
+      this.setState({organization: this.state.organizations.filter(org => org.id === event.target.dataset.id)[0]});
     }
   }
 
@@ -125,9 +124,9 @@ export default class App extends React.Component{
                 </li>
               </ul>
               <hr/>
-              <a href="#" className="fs-6 text-white text-decoration-none disabled">
+              <small className="fs-6 text-white text-decoration-none disabled">
                 {this.state.user.username}
-              </a>
+              </small>
               <hr/>
               <div className="d-grid gap-2">
                 <button type="button" className="fs-6 text-white btn btn-outline-secondary" onClick={this.logout}>
