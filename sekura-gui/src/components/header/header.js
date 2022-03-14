@@ -40,6 +40,12 @@ export default class Header extends React.Component{
           </li>
           <li>
             <a href="#" className="nav-link text-white">
+              <i className="bi bi-person-circle"></i>
+              Access
+            </a>
+          </li>
+          <li>
+            <a href="#" className="nav-link text-white">
               <i className="bi bi-speedometer2"></i>
               Dashboard
             </a>
@@ -54,12 +60,6 @@ export default class Header extends React.Component{
             <a href="#" className="nav-link text-white">
               <i className="bi bi-grid"></i>
               Products
-            </a>
-          </li>
-          <li>
-            <a href="#" className="nav-link text-white">
-              <i className="bi bi-person-circle"></i>
-              Customers
             </a>
           </li>
         </ul>

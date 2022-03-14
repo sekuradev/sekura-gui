@@ -1,6 +1,7 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
+import "bootstrap";
 import './App.css';
 
 import {
@@ -22,8 +23,12 @@ export default class App extends React.Component{
     super(props);
     this.handleLoginChange = this.handleLoginChange.bind(this);
     this.refreshSessionToken = this.refreshSessionToken.bind(this);
+    this.logout = this.logout.bind(this);
+    this.handleOrganizationOnClick= this.handleOrganizationOnClick.bind(this);
     this.state = {
       user: null,
+      organizations: null,
+      organization: null,
     }
   }
 
@@ -42,15 +47,27 @@ export default class App extends React.Component{
     apiSession.refresh();
   }
 
+  logout() {
+    apiSession.logout();
+    this.handleLoginChange(null);
+  }
+
   handleLoginChange(newUserId) {
     if (newUserId == null) {
       this.setState({user: null});
       return
     }
     apiUser.getCurrentUser().then((response) => {
-      console.log(response.data);
       this.setState({user: response.data});
+      this.setState({organizations: response.data.organizations});
+      this.setState({organization: response.data.organizations[0]});
     });
+  }
+
+  handleOrganizationOnClick(event) {
+    if (this.state.organizations) {
+      this.setState({organization: this.state.organizations.filter(org => org.id == event.target.dataset.id)[0]});
+    }
   }
 
   render() {
@@ -59,54 +76,75 @@ export default class App extends React.Component{
         <Login handleLoginChange={this.handleLoginChange} />
       )
     }
+    var listOrganizations = this.state.user.organizations.map((org) =>
+      <li key={org.id} data-id={org.id} onClick={this.handleOrganizationOnClick.bind(this)} className="dropdown-item" >{org.name}</li>
+    );
+    var currentOrganization = this.state.organization ? this.state.organization.name : "Select organization";
     return (
       <Router>
-        <div className="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark sidebar" _style="width: 280px;">
-          <a href="/" className="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-            <span className="fs-4"><b>SEKURA</b></span>
-          </a>
-          <hr/>
-          <ul className="nav nav-pills flex-column mb-auto">
-            <li className="nav-item">
-              <Link to="/preferences" className="nav-link active" aria-current="page">
-                <i className="bi bi-house-door"></i>
-                Home
-              </Link>
-            </li>
-            <li>
-              <Link to="/dashboard" className="nav-link text-white">
-                <i className="bi bi-speedometer2"></i>
-                Dashboard
-              </Link>
-            </li>
-            <li>
-              <a href="#" className="nav-link text-white">
-                <i className="bi bi-table"></i>
-                Orders
+        <div className="container-fluid">
+          <div className="row">
+            <div className="col-md-3 col-lg-2 d-md-block d-flex flex-column flex-shrink-0 p-3 text-white bg-dark sidebar">
+              <a href="/" className="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+                <span className="fs-4"><b>SEKURA</b></span>
               </a>
-            </li>
-            <li>
-              <a href="#" className="nav-link text-white">
-                <i className="bi bi-grid"></i>
-                Products
+              <hr/>
+              <div className="btn-group dropend">
+                <button type="button" className="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                  {currentOrganization}
+                </button>
+                <ul className="dropdown-menu">
+                  {listOrganizations}
+                </ul>
+              </div>
+
+              <ul className="nav nav-pills flex-column mb-auto">
+                <li>
+                  <Link to="/dashboard" className="nav-link text-white">
+                    <i className="bi bi-speedometer2"></i>
+                    Dashboard
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/access" className="nav-link text-white">
+                    <i className="bi bi-person-circle"></i>
+                    Access
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/controls" className="nav-link text-white">
+                    <i className="bi bi-table"></i>
+                    Controls
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/integrations" className="nav-link text-white">
+                    <i className="bi bi-grid"></i>
+                    Integrations
+                  </Link>
+                </li>
+              </ul>
+              <hr/>
+              <a href="#" className="fs-6 text-white text-decoration-none disabled">
+                {this.state.user.username}
               </a>
-            </li>
-            <li>
-              <a href="#" className="nav-link text-white">
-                <i className="bi bi-person-circle"></i>
-                Customers
-              </a>
-            </li>
-          </ul>
-          <hr/>
-          <a href="#" class="d-flex align-items-center text-white text-decoration-none disabled">
-            {this.state.user.username}
-          </a>
+              <hr/>
+              <div className="d-grid gap-2">
+                <button type="button" className="fs-6 text-white btn btn-outline-secondary" onClick={this.logout}>
+                  Logout
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
-        <Routes>
-          <Route exact path="/preferences" element={<Preferences/>}/>
-          <Route exact path="/dashboard" element={<Dashboard/>}/>
-        </Routes>
+        <div className="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+          <Routes>
+            <Route exact path="/dashboard" element={<Dashboard/>}/>
+            <Route exact path="/access" element={<Preferences/>}/>
+            <Route exact path="/controls" element={<Preferences/>}/>
+            <Route exact path="/integrations" element={<Preferences/>}/>
+          </Routes>
+        </div>
       </Router>
     )
   }
