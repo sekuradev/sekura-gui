@@ -31,4 +31,6 @@ class OrganizationList(generics.ListAPIView):
 class AvailableIntegrationList(View):
     def get(self, foo=""):
         serializer = serializers.AvailableIntegration(integrations.get().values(), many=True)
-        return JsonResponse({"results": serializer.data}, safe=False)
+        return JsonResponse(
+            {"results": serializer.data},
+        )

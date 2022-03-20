@@ -5,6 +5,7 @@ class Integrations:
     def register(self, clazz):
         self._registry[clazz.name] = {
             "name": clazz.name,
+            "description": clazz.description,
             "class": clazz,
         }
 
