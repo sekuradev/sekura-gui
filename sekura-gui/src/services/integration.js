@@ -1,7 +1,5 @@
-import axios from "axios";
-
-axios.defaults.headers.common["Content-Type"] = "application/json";
+var session = require("./session");
 
 export function getAvailableIntegrations() {
-  return axios.get("/api/integration/available/");
+  return session.getAxiosSession().get("/api/integration/available/");
 }

@@ -1,7 +1,5 @@
-import axios from "axios";
-
-axios.defaults.headers.common['Content-Type'] = "application/json";
+var session = require("./session");
 
 export function getCurrentUser(userId) {
-  return axios.get("/api/user/");
+  return session.getAxiosSession().get("/api/user/");
 }
