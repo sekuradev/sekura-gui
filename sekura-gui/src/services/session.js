@@ -36,6 +36,7 @@ export function logout() {
 }
 
 export function refresh() {
+  console.log("refreshing:" + new Date());
   return axios
     .post("/api/token/refresh/", {
       access: localStorage.getItem("access"),
