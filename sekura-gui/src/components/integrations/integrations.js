@@ -4,16 +4,43 @@ var apiIntegration = require("../../services/integration");
 
 export default function Integrations(props) {
   const [services, setServices] = useState([]);
+  const [integrations, setIntegrations] = useState([]);
 
   useEffect(() => {
+    console.log("useEffect called");
     apiIntegration.getAvailableIntegrations().then((response) => {
       setServices(response.data.results);
     });
-  });
+    apiIntegration.getIntegrations(props.organizationid).then((response) => {
+      setIntegrations(response.data.results);
+    });
+  }, []);
 
   return (
     <div>
       <h1>Integrations</h1>
+      <table className="table table-sm">
+        <thead>
+          <tr>
+            <th>Service</th>
+            <th>Description</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {integrations.map((integration, i) => {
+            return (
+              <tr key={integration.name}>
+                <td>{integration.name}</td>
+                <td>{integration.description}</td>
+                <td></td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+      <h2>Add a new Integrations</h2>
       <table className="table table-sm">
         <thead>
           <tr>

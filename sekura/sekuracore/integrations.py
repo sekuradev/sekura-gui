@@ -6,7 +6,7 @@ class Integrations:
         self._registry[clazz.name] = {
             "name": clazz.name,
             "description": clazz.description,
-            "class": clazz,
+            "_class": clazz,
         }
 
     def get(self):

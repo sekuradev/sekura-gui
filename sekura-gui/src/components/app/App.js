@@ -141,7 +141,15 @@ export default function App(props) {
           <Route exact path="/dashboard" element={<Dashboard />} />
           <Route exact path="/access" element={<Preferences />} />
           <Route exact path="/controls" element={<Preferences />} />
-          <Route exact path="/integrations" element={<Integrations />} />
+          <Route
+            exact
+            path="/integrations"
+            element={
+              <Integrations
+                organizationid={organization ? organization.id : null}
+              />
+            }
+          />
           <Route
             exact
             path="/integrations_add/:kind"

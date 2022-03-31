@@ -34,3 +34,19 @@ class AvailableIntegrationList(View):
         return JsonResponse(
             {"results": serializer.data},
         )
+
+
+class IntegrationList(generics.ListAPIView):
+    serializer_class = serializers.Integration
+    queryset = models.Integration.objects.all()
+
+    def get_queryset(self):
+        return models.Integration.objects.filter(organization__id=self.kwargs["orgid"])
+
+
+class Integration(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = serializers.Integration
+    queryset = models.Integration.objects.all()
+
+    def get_queryset(self):
+        return models.Integration.objects.filter(organization__id=self.kwargs["orgid"])
