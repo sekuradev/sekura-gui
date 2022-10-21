@@ -20,6 +20,11 @@ jobs:
         uses: actions/setup-python@v3
         with:
           python-version: ${{ matrix.python-version }}
+      - name: Install Poetry
+        working-directory: ./sekura
+        run: |
+          pip install poetry
+          poetry --version
       - name: Install Dependencies
         working-directory: ./sekura
         run: |
