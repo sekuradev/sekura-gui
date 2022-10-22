@@ -7,6 +7,7 @@ export default function Integrations(props) {
   const [integrations, setIntegrations] = useState([]);
 
   useEffect(() => {
+    console.log("useEffect called");
     apiIntegration.getAvailableIntegrations().then((response) => {
       setServices(response.data.results);
     });

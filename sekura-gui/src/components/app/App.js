@@ -10,7 +10,6 @@ import Login from "../login/login";
 import Dashboard from "../dashboard/dashboard";
 import Preferences from "../preferences/preferences";
 import Integrations from "../integrations/integrations";
-import Access from "../access/access";
 import IntegrationsAdd from "../integrations/integrationsadd";
 var apiSession = require("../../services/session");
 var apiUser = require("../../services/user");
@@ -140,7 +139,7 @@ export default function App(props) {
       <div className="col-md-9 ms-sm-auto col-lg-10 px-md-4">
         <Routes>
           <Route exact path="/dashboard" element={<Dashboard />} />
-          <Route exact path="/access" element={<Access />} />
+          <Route exact path="/access" element={<Preferences />} />
           <Route exact path="/controls" element={<Preferences />} />
           <Route
             exact

@@ -14,4 +14,3 @@ celery
 django-celery-results
 django-celery-beat
 flower
-pygithub
