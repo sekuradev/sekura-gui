@@ -28,6 +28,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
+        working-directory: ./sekura-gui
       - run: npm run build
         working-directory: ./sekura-gui
       - run: npm run test-ci
