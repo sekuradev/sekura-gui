@@ -1,4 +1,4 @@
-version: '3.3'
+version: "3.3"
 
 services:
   db:
@@ -7,7 +7,7 @@ services:
       POSTGRES_PASSWORD: &password secret
       DB_PASSWORD: *password
     volumes:
-      - ./data/db:/var/lib/postgresql/data
+      - db-data:/var/lib/postgresql/data
 
   redis:
     image: redis
@@ -19,24 +19,23 @@ services:
     depends_on:
       - db
     environment:
-      << : *secrets
+      <<: *secrets
       ADMINER_PLUGINS: dump-json tables-filter
 
   sekura:
     build: ./sekura
-    image: sekura:local
     volumes:
       - ./sekura:/app
     depends_on:
       - db
     environment: &sekurasecrets
-      << : *secrets
+      <<: *secrets
       DB_ENGINE: django.db.backends.postgresql
       DB_USER: postgres
       DB_PASSWORD: *password
       DB_HOST: db
       DJANGO_DEBUG: "true"
-      ALLOWED_HOSTS: sekura,sekura:8000,localhost:9999,localhost:9996
+      ALLOWED_HOSTS: sekura,sekura:8000,localhost:9999,localhost:9996,localhost:9997,localhost
       CSRF_TRUSTED_ORIGINS: http://sekura
       PYTHONDONTWRITEBYTECODE: 1
       CACHE_JSON: |
@@ -60,43 +59,42 @@ services:
       - 9997:8000
 
   sekura-beat:
-    image: sekura:local
+    build: ./sekura
     command: ./docker-exec.sh celery -A sekura beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
     volumes:
       - ./sekura:/app
     depends_on:
       - redis
     environment:
-      << : *sekurasecrets
+      <<: *sekurasecrets
 
   sekura-worker:
-    image: sekura:local
+    build: ./sekura
     command: ./docker-exec.sh celery -A sekura worker -l INFO
     volumes:
       - ./sekura:/app
     depends_on:
       - redis
     environment:
-      << : *sekurasecrets
+      <<: *sekurasecrets
 
   sekura-flower:
-    image: sekura:local
+    build: ./sekura
     command: ./docker-exec.sh celery flower --port=8000 --url-prefix=/flower
     volumes:
       - ./sekura:/app
     environment:
-      << : *sekurasecrets
+      <<: *sekurasecrets
 
   sekura-automate:
-    image: sekura:local
+    build: ./sekura
     command: ./docker-automate.sh
     volumes:
       - ./sekura:/app
     depends_on:
       - db
     environment:
-      << : *sekurasecrets
-
+      <<: *sekurasecrets
 
   gui:
     build: ./sekura-gui
@@ -120,3 +118,6 @@ services:
       - ./sekura/assets:/usr/share/nginx/html/assets
     ports:
       - 9999:80
+
+volumes:
+  db-data:

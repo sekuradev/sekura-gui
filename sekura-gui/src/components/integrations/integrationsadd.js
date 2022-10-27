@@ -1,7 +1,4 @@
-import React, { useState } from "react";
 import { useParams } from "react-router-dom";
-
-var apiIntegration = require("../../services/integration");
 
 export default function IntegrationAdd(props) {
   const params = useParams();

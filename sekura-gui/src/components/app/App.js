@@ -33,7 +33,7 @@ export default function App(props) {
   const handleOrganizationOnClick = (event) => {
     if (organizations) {
       setOrganization(
-        organizations.filter((org) => org.id == event.target.dataset.id)[0]
+        organizations.filter((org) => org.id === event.target.dataset.id)[0]
       );
     }
   };
@@ -43,7 +43,6 @@ export default function App(props) {
   };
 
   useEffect(() => {
-    console.log("dentro");
     handleLoginChange(apiSession.getUserId());
     const timer = setInterval(() => apiSession.refresh(), 60000);
     return () => {

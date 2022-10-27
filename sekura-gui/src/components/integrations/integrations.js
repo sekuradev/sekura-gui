@@ -4,16 +4,16 @@ var apiIntegration = require("../../services/integration");
 
 export default function Integrations(props) {
   const [services, setServices] = useState([]);
-  const [integrations, setIntegrations] = useState([]);
+  const [integrations] = useState([]);
 
   useEffect(() => {
     console.log("useEffect called");
     apiIntegration.getAvailableIntegrations().then((response) => {
       setServices(response.data.results);
     });
-    apiIntegration.getIntegrations(props.organizationid).then((response) => {
-      setIntegrations(response.data.results);
-    });
+    //apiIntegration.getIntegrations(props.organizationid).then((response) => {
+    //setIntegrations(response.data.results);
+    //});
   }, []);
 
   return (
