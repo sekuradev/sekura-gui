@@ -21,7 +21,9 @@ test("renders without crashing", () => {
   const mockLoginHandler = (userId) => {
     return {};
   };
-  render(<Login handleLoginChange={mockLoginHandler} />);
+  act(() => {
+    render(<Login handleLoginChange={mockLoginHandler} />, container);
+  });
   const linkElement = screen.getByText(/Please sign in/i);
   expect(linkElement).toBeInTheDocument();
 });

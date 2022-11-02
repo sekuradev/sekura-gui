@@ -21,7 +21,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "updatebrowserlist": "npx browserslist@latest --update-db",
-    "test": "react-scripts test",
+    "test": "react-scripts test --coverage",
     "test-ci": "react-scripts test --watchAll=false",
     "eject": "react-scripts eject"
   },

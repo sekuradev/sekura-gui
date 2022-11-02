@@ -3,8 +3,8 @@ import jwt_decode from "jwt-decode";
 
 axios.defaults.headers.common["Content-Type"] = "application/json";
 
-export function login(user, password) {
-  return axios
+export const login = async (user, password) => {
+  return await axios
     .post("/api/token/", {
       username: user,
       password: password,
@@ -15,9 +15,9 @@ export function login(user, password) {
       axios.defaults.headers.common["Authorization"] =
         "Bearer " + response.data.access;
     });
-}
+};
 
-export function getUserId() {
+export const getUserId = () => {
   try {
     var access = localStorage.getItem("access");
     var decoded = jwt_decode(access);
@@ -28,7 +28,7 @@ export function getUserId() {
   } catch (error) {
     return null;
   }
-}
+};
 
 export function logout() {
   localStorage.removeItem("access");

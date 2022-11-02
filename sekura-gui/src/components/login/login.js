@@ -33,7 +33,9 @@ export default function Login(props) {
     <div className="login">
       <div className="form-signin text-center">
         <form onSubmit={handleSubmit}>
-          <h1 className="h3 mb-3 fw-normal">Please sign in</h1>
+          <h1 className="h3 mb-3 fw-normal" id="title">
+            Please sign in
+          </h1>
 
           <div className="form-floating">
             <input
