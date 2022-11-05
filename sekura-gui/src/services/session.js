@@ -3,6 +3,16 @@ import jwt_decode from "jwt-decode";
 
 axios.defaults.headers.common["Content-Type"] = "application/json";
 
+const setAccessToken = (token) => {
+  localStorage.setItem("access", token);
+  axios.defaults.headers.common["Authorization"] =
+    "Authorization: Bearer " + token;
+};
+
+const setRefreshToken = (token) => {
+  localStorage.setItem("refresh", token);
+};
+
 export const login = async (user, password) => {
   return await axios
     .post("/api/token/", {
@@ -10,11 +20,10 @@ export const login = async (user, password) => {
       password: password,
     })
     .then((response) => {
-      localStorage.setItem("access", response.data.access);
-      localStorage.setItem("refresh", response.data.refresh);
-      axios.defaults.headers.common["Authorization"] =
-        "Bearer " + response.data.access;
-    });
+      setAccessToken(response.data.access);
+      setRefreshToken(response.data.refresh);
+    })
+    .catch((response) => {});
 };
 
 export const getUserId = () => {
@@ -30,30 +39,22 @@ export const getUserId = () => {
   }
 };
 
-export function logout() {
+export const logout = () => {
   localStorage.removeItem("access");
   localStorage.removeItem("refresh");
-}
+};
 
-export function refresh() {
-  console.log("refreshing:" + new Date());
-  return axios
+export const refresh = async () => {
+  return await axios
     .post("/api/token/refresh/", {
       access: localStorage.getItem("access"),
       refresh: localStorage.getItem("refresh"),
     })
     .then((response) => {
       if (response.data.access) {
-        localStorage.setItem("access", response.data.access);
-        axios.defaults.headers.common["Authorization"] =
-          "Authorization: Bearer " + response.data.access;
+        setAccessToken(response.data.access);
       }
-      if (response.data.refresh) {
-        localStorage.setItem("refresh", response.data.refresh);
-      }
-    });
-}
-
-export function getAxiosSession() {
-  return axios.create();
-}
+      setRefreshToken(response.data.refresh);
+    })
+    .catch((response) => {});
+};
