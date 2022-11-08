@@ -21,8 +21,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "updatebrowserlist": "npx browserslist@latest --update-db",
-    "test": "react-scripts test --coverage",
-    "test-ci": "react-scripts test --watchAll=false",
+    "test": "react-scripts test --coverage  --transformIgnorePatterns \"node_modules/(?!axios)/\"",
+    "test-ci": "react-scripts test --watchAll=false  --transformIgnorePatterns \"node_modules/(?!axios)/\"",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
