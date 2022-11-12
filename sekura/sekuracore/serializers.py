@@ -4,13 +4,6 @@ from rest_framework import serializers
 from . import models
 
 
-class Organization(serializers.ModelSerializer):
-    class Meta:
-        model = models.Organization
-        fields = "__all__"
-        depth = 0
-
-
 class User(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
@@ -18,38 +11,22 @@ class User(serializers.ModelSerializer):
         depth = 0
 
 
-class OrganizationDetails(serializers.ModelSerializer):
-    users = User(many=True, read_only=True)
-
+class Agent(serializers.ModelSerializer):
     class Meta:
-        model = models.Organization
+        model = models.Agent
+        fields = "__all__"
+        depth = 0
+
+
+class Employee(serializers.ModelSerializer):
+    class Meta:
+        model = models.Employee
+        fields = "__all__"
+        depth = 0
+
+
+class Access(serializers.ModelSerializer):
+    class Meta:
+        model = models.Access
         fields = "__all__"
         depth = 1
-
-
-class UserDetails(serializers.ModelSerializer):
-    organizations = Organization(
-        many=True,
-        read_only=True,
-    )
-
-    class Meta:
-        model = get_user_model()
-        exclude = ["password"]
-        depth = 1
-
-
-class GenericSerializer(serializers.Serializer):
-    class Meta:
-        model = None
-
-
-class Integration(serializers.ModelSerializer):
-    class Meta:
-        model = models.Integration
-        fields = "__all__"
-
-
-class AvailableIntegration(serializers.Serializer):
-    name = serializers.CharField(max_length=200)
-    description = serializers.CharField(max_length=200)

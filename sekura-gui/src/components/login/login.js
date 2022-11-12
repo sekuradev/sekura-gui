@@ -1,25 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import "./login.css";
 var session = require("../../services/session");
 
 export default function Login(props) {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const usernameRef = useRef();
+  const passwordRef = useRef();
   const [lastError, setLastError] = useState("");
   props.handleLoginChange(session.getUserId());
-
-  const handleChangeUsername = (event) => {
-    setUsername(event.target.value);
-  };
-
-  const handleChangePassword = (event) => {
-    setPassword(event.target.value);
-  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
     session
-      .login(username, password)
+      .login(usernameRef.current.value, passwordRef.current.value)
       .then((p) => {
         props.handleLoginChange(session.getUserId());
       })
@@ -43,7 +35,7 @@ export default function Login(props) {
               className="form-control"
               id="email"
               placeholder="name@example.com"
-              onChange={handleChangeUsername}
+              ref={usernameRef}
             />
             <label htmlFor="email">Email address</label>
           </div>
@@ -53,7 +45,7 @@ export default function Login(props) {
               className="form-control"
               id="Password"
               placeholder="Password"
-              onChange={handleChangePassword}
+              ref={passwordRef}
             />
             <label htmlFor="Password">Password</label>
           </div>

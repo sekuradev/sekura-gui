@@ -1,52 +1,23 @@
-from django.contrib.auth import get_user_model
-from django.http import JsonResponse
-from django.shortcuts import get_object_or_404, render
-from django.views import View
+from django.shortcuts import render
 from rest_framework import generics
 
 from . import models, serializers
-from .integrations import integrations
 
 
 def index(request):
     return render(request, "index.html")
 
 
-class UserDetails(generics.RetrieveAPIView):
-    queryset = get_user_model().objects.all().prefetch_related("organizations")
-    serializer_class = serializers.UserDetails
-
-    def get_object(self):
-        queryset = self.get_queryset()
-        pk = self.request.resolver_match.kwargs.get("pk", self.request.user.pk)
-        obj = get_object_or_404(queryset, pk=pk)
-        return obj
+class Agent(generics.RetrieveAPIView):
+    queryset = models.Agent.objects.all()
+    serializer_class = serializers.Agent
 
 
-class OrganizationList(generics.ListAPIView):
-    queryset = models.Organization.objects.all()
-    serializer_class = serializers.OrganizationDetails
+class Employee(generics.RetrieveAPIView):
+    queryset = models.Employee.objects.all()
+    serializer_class = serializers.Employee
 
 
-class AvailableIntegrationList(View):
-    def get(self, foo=""):
-        serializer = serializers.AvailableIntegration(integrations.get().values(), many=True)
-        return JsonResponse(
-            {"results": serializer.data},
-        )
-
-
-class IntegrationList(generics.ListAPIView):
-    serializer_class = serializers.Integration
-    queryset = models.Integration.objects.all()
-
-    def get_queryset(self):
-        return models.Integration.objects.filter(organization__id=self.kwargs["orgid"])
-
-
-class Integration(generics.RetrieveUpdateDestroyAPIView):
-    serializer_class = serializers.Integration
-    queryset = models.Integration.objects.all()
-
-    def get_queryset(self):
-        return models.Integration.objects.filter(organization__id=self.kwargs["orgid"])
+class Access(generics.RetrieveAPIView):
+    queryset = models.Access.objects.all()
+    serializer_class = serializers.Access
